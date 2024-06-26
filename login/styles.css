@@ -103,12 +103,11 @@ body, html {
 }
 
 .social-login {
-    display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
 .social-btn {
+    display: inline-block;
     text-decoration: none;
     padding: 10px 20px;
     margin: 0 10px;
@@ -124,11 +123,33 @@ body, html {
     color: #6882f8;
 }
 
-
 .or-divider {
     color: #ffffff;
     margin: 20px 0;
     font-size: 18px;
+}
+
+.line-through {
+    display: inline-block;
+    position: relative;
+}
+
+.line-through::before,
+.line-through::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 50%;
+    height: 1px;
+    background-color: #ffffff;
+}
+
+.line-through::before {
+    left: -110%; /* Adjust as needed */
+}
+
+.line-through::after {
+    right: -110%; /* Adjust as needed */
 }
 
 .login-form {
@@ -169,10 +190,35 @@ body, html {
     border-color: #6882f8;
 }
 
+/* Styles for the "Remember Me" checkbox and label */
+.input-container.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: flex-start; /* Align left */
+}
+
+.input-container.remember-me input[type="checkbox"] {
+    margin-right: 10px; /* Add space between checkbox and text */
+    width: 20px;
+    height: 20px;
+    accent-color: #6882f8; /* Change checkbox color */
+    cursor: pointer;
+    border-radius: 50%; /* Make checkbox rounded */
+}
+
+.input-container.remember-me label {
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Adjusting the form button margin */
 button.login-btn {
+    margin-top: 20px; /* Adjust margin to balance with the checkbox */
     width: 100%;
     padding: 10px 20px;
-    margin-top: 10px;
     background-color: #171925;
     color: #ffffff;
     border: 2px solid transparent;
@@ -186,4 +232,11 @@ button.login-btn:hover {
     background-color: transparent;
     color: #6882f8;
     border-color: #6882f8;
+}
+
+/* Error message styling */
+.error-message {
+    color: #ff4f4f;
+    margin-top: 20px;
+    font-size: 14px;
 }
