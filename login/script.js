@@ -10,6 +10,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Get references to the auth service
 const auth = firebase.auth();
 
 // Handle social login
