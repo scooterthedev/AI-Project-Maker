@@ -7,3 +7,21 @@ for (let i = 0; i < numBlocks; i++) {
     block.classList.add('block');
     grid.appendChild(block);
 }
+document.addEventListener("DOMContentLoaded", async () => {
+    const auth0Client = await createAuth0Client();
+  
+    const isAuthenticated = await auth0Client.isAuthenticated();
+  
+    if (isAuthenticated) {
+      document.getElementById("loginBtn").style.display = "none";
+      document.getElementById("profile").style.display = "block";
+  
+      const user = await auth0Client.getUser();
+      document.getElementById("profile-name").innerText = user.name;
+      document.getElementById("profile-email").innerText = user.email;
+    } else {
+      document.getElementById("loginBtn").style.display = "block";
+      document.getElementById("profile").style.display = "none";
+    }
+  });
+  

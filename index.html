@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Maker</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
+    <script src="auth0/auth0.js" defer></script>
     <style>
         .typing-bar {
             display: inline-block;
@@ -26,12 +28,14 @@
             margin-bottom: 10px;
         }
     </style>
-    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="top-bar">
         <a href="/login" class="login-btn">Login</a>
         <a href="/get-started" class="signup-btn">Sign Up</a>
+        <div id="login-btn" style="display:none;">
+            <button onclick="login()">Log In</button>
+        </div>
     </div>
 
     <div class="menu-container">
@@ -54,10 +58,9 @@
             An All-In-One Project Creation Tool<br>
             For <span id="typing-text"></span><span class="typing-bar"></span>
         </div>
-            <!-- "Get Started" button -->
-            <a href="/get-started" class="get-started-btn">Get Started</a>
-        </div>
-    
+        <!-- "Get Started" button -->
+        <a href="/get-started" class="get-started-btn">Get Started</a>
+    </div>
 
     <script>
         // Typing effect for multiple words
@@ -93,6 +96,7 @@
         }
 
         typeText(); // Start typing animation
+
     </script>
 </body>
 </html>
