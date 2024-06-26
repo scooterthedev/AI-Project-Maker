@@ -1,0 +1,53 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0a0c19;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%; /* Ensure menu spans full width */
+    background-color: #1a1c29; /* Background color for menu */
+    padding: 10px 0; /* Vertical padding for menu */
+}
+
+.menu a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px; /* Rounded corners for menu items */
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: #141622;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive columns */
+    grid-template-rows: repeat(auto-fill, minmax(85px, 1fr)); /* Responsive rows */
+    width: 1450px;
+    height: 600px;
+    margin: 0 auto; /* Center align grid */
+    padding: 20px; /* Padding for grid */
+}
+
+.block {
+    background-color: transparent;
+    border: 0.2px solid #181a26; /* Smaller white outline */
+    border-radius: 10px; /* Rounded corners */
+    transition: background-color 0.3s;
+}
+
+.block:hover {
+    background-color: #141622;
+}
