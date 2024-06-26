@@ -23,15 +23,6 @@ body, html {
     z-index: 2; /* Ensure it's above grid */
 }
 
-.welcome-text {
-    color: #ffffff;
-    font-size: 20px; /* Adjust font size as needed */
-    position: absolute;
-    top: 400%; /* One square down from the menu bar */
-    transform: translateX(-50%);
-    left: 50%;
-}
-
 .login-btn, .signup-btn {
     text-decoration: none;
     padding: 10px 20px;
@@ -46,29 +37,12 @@ body, html {
     border: 2px solid transparent;
     border-radius: 5px;
     box-shadow: 0 0 5px 2px rgba(104, 130, 248, 0.5); /* Blue glow effect */
-    position: relative; /* Ensure position context for pseudo-element */
 }
 
 .login-btn:hover {
     border-color: #6882f8;
     background-color: transparent;
     color: #6882f8;
-}
-
-.login-btn:before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.login-btn:hover:before {
-    opacity: 1;
 }
 
 .signup-btn {
@@ -118,66 +92,97 @@ body, html {
     background-color: #141622;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Responsive columns */
-    grid-template-rows: repeat(auto-fill, minmax(85px, 1fr)); /* Responsive rows */
-    width: 1450px; /* Adjust width as needed */
-    height: 600px;
-    padding: 20px; /* Padding for grid */
-    position: relative;
-    top: 90px; /* Adjusted to start 10px below menu */
-    z-index: 1; /* Ensure it's behind menu */
-}
-
-.block {
-    background-color: transparent;
-    border: 0.2px solid #181a26; /* Smaller white outline */
-    border-radius: 10px; /* Rounded corners */
-    transition: background-color 0.3s;
-}
-
-.block:hover {
-    background-color: #141622;
-}
-
-.additional-text {
-    position: absolute;
-    top: calc(90px + 230px); /* One square down from the menu */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #1a1c29;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     text-align: center;
-    z-index: 1;
 }
 
-.big-text {
-    color: #ffffff;
-    font-size: 55px; /* Adjust size as needed */
-    margin-bottom: 10px;
+.social-login {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.bold-text {
-    font-weight: bold;
-}
-
-.subtitle {
-    color: #ffffff;
-    font-size: 55px; /* Match the size of big-text */
-    font-weight: bold; /* Match the boldness of big-text */
-    margin-top: 10px; /* Adjust spacing */
-}
-.get-started-btn {
-    margin-top: 20px; /* Adjust spacing */
+.social-btn {
     text-decoration: none;
     padding: 10px 20px;
+    margin: 0 10px;
     border-radius: 5px;
-    background-color: #6882f8;
     color: #ffffff;
-    border: 2px solid transparent;
+    background-color: #6882f8;
     transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-    font-weight: bold;
-    display: inline-block;
 }
 
-.get-started-btn:hover {
+.social-btn:hover {
+    background-color: transparent;
+    border-color: #6882f8;
+    color: #6882f8;
+}
+
+
+.or-divider {
+    color: #ffffff;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.input-container {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-container label {
+    color: #ffffff;
+    margin-bottom: 8px;
+    display: block;
+    text-align: left;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #0a0c19;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.input-container input:focus {
+    outline: none;
+    border-color: #6882f8;
+}
+
+button.login-btn {
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #171925;
+    color: #ffffff;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+button.login-btn:hover {
     background-color: transparent;
     color: #6882f8;
     border-color: #6882f8;

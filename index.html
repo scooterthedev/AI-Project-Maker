@@ -5,12 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Maker</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .typing-bar {
+            display: inline-block;
+            width: 20px; /* Width of the typing indicator */
+            height: 1em; /* Height of the typing indicator */
+            background-color: white; /* Color of the typing indicator */
+            animation: blink-caret 1s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .big-text {
+            color: #ffffff;
+            font-size: 20px; /* Adjust size as needed */
+            margin-bottom: 10px;
+        }
+    </style>
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="top-bar">
-        <a href="#" class="login-btn">Login</a>
-        <a href="#" class="signup-btn">Sign Up</a>
+        <a href="/login" class="login-btn">Login</a>
+        <a href="/get-started" class="signup-btn">Sign Up</a>
     </div>
 
     <div class="menu-container">
@@ -31,25 +52,47 @@
         </div>
         <div class="subtitle">
             An All-In-One Project Creation Tool<br>
-            For <span id="typing-text"></span>
+            For <span id="typing-text"></span><span class="typing-bar"></span>
         </div>
-    </div>
+            <!-- "Get Started" button -->
+            <a href="/get-started" class="get-started-btn">Get Started</a>
+        </div>
+    
 
     <script>
-        // Typing effect for "Coders"
+        // Typing effect for multiple words
         const typingElement = document.getElementById('typing-text');
-        const textToType = 'Coders';
-        let index = 0;
+        const words = ['Coders', 'Architects', 'Enthusiasts'];
+        let currentWordIndex = 0;
+        let currentCharIndex = 0;
+        let isTypingForward = true;
 
         function typeText() {
-            if (index < textToType.length) {
-                typingElement.textContent += textToType.charAt(index);
-                index++;
-                setTimeout(typeText, 200); // Adjust typing speed (milliseconds)
+            const currentWord = words[currentWordIndex];
+
+            if (isTypingForward) {
+                if (currentCharIndex < currentWord.length) {
+                    typingElement.textContent += currentWord.charAt(currentCharIndex);
+                    currentCharIndex++;
+                    setTimeout(typeText, 200); // Adjust typing speed (milliseconds)
+                } else {
+                    isTypingForward = false;
+                    setTimeout(typeText, 1000); // Pause before typing backwards (milliseconds)
+                }
+            } else {
+                if (currentCharIndex >= 0) {
+                    typingElement.textContent = currentWord.substring(0, currentCharIndex);
+                    currentCharIndex--;
+                    setTimeout(typeText, 100); // Adjust typing speed for backwards typing (milliseconds)
+                } else {
+                    isTypingForward = true;
+                    currentWordIndex = (currentWordIndex + 1) % words.length; // Move to next word
+                    setTimeout(typeText, 1000); // Pause before typing next word (milliseconds)
+                }
             }
         }
 
-        typeText();
+        typeText(); // Start typing animation
     </script>
 </body>
 </html>
