@@ -5,26 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Maker</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="top-bar">
         <a href="#" class="login-btn">Login</a>
         <a href="#" class="signup-btn">Sign Up</a>
     </div>
+
     <div class="menu-container">
         <div class="menu">
-            <!-- Your menu items here -->
             <a href="#">Home</a>
             <a href="#">Projects</a>
             <a href="#">Pricing</a>
             <a href="#">Contact</a>
         </div>
     </div>
-    <div class="grid">
-        <!-- Your grid items here -->
-        <div class="block"></div>
-        <!-- Repeat as needed -->
+
+    <div class="grid"></div>
+
+    <div class="additional-text">
+        <div class="big-text">
+            Welcome To
+            <span class="bold-text">Project Maker</span>
+        </div>
+        <div class="subtitle">
+            An All-In-One Project Creation Tool<br>
+            For <span id="typing-text"></span>
+        </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Typing effect for "Coders"
+        const typingElement = document.getElementById('typing-text');
+        const textToType = 'Coders';
+        let index = 0;
+
+        function typeText() {
+            if (index < textToType.length) {
+                typingElement.textContent += textToType.charAt(index);
+                index++;
+                setTimeout(typeText, 200); // Adjust typing speed (milliseconds)
+            }
+        }
+
+        typeText();
+    </script>
 </body>
 </html>

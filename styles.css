@@ -15,12 +15,21 @@ body, html {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 100%;
+    width: 95%;
     padding: 10px 20px;
     box-sizing: border-box;
     position: absolute;
     top: 20px; /* Adjust as needed */
     z-index: 2; /* Ensure it's above grid */
+}
+
+.welcome-text {
+    color: #ffffff;
+    font-size: 20px; /* Adjust font size as needed */
+    position: absolute;
+    top: 400%; /* One square down from the menu bar */
+    transform: translateX(-50%);
+    left: 50%;
 }
 
 .login-btn, .signup-btn {
@@ -35,6 +44,8 @@ body, html {
     background-color: #171925;
     color: #ffffff;
     border: 2px solid transparent;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 2px rgba(104, 130, 248, 0.5); /* Blue glow effect */
     position: relative; /* Ensure position context for pseudo-element */
 }
 
@@ -52,8 +63,6 @@ body, html {
     right: -2px;
     bottom: -2px;
     z-index: -1;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 3px rgba(104, 130, 248, 0.5); /* Blue glow effect */
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -61,7 +70,6 @@ body, html {
 .login-btn:hover:before {
     opacity: 1;
 }
-
 
 .signup-btn {
     margin-left: 10px;
@@ -83,7 +91,7 @@ body, html {
     max-width: 800px; /* Limiting maximum width */
     margin-bottom: 20px;
     position: absolute;
-    top: 60px; /* Adjust as needed */
+    top: 30px; /* Adjust as needed */
     z-index: 2; /* Ensure it's above grid */
 }
 
@@ -116,9 +124,9 @@ body, html {
     grid-template-rows: repeat(auto-fill, minmax(85px, 1fr)); /* Responsive rows */
     width: 1450px; /* Adjust width as needed */
     height: 600px;
-    margin: 0 auto; /* Center align grid with margin */
     padding: 20px; /* Padding for grid */
     position: relative;
+    top: 90px; /* Adjusted to start 10px below menu */
     z-index: 1; /* Ensure it's behind menu */
 }
 
@@ -131,4 +139,28 @@ body, html {
 
 .block:hover {
     background-color: #141622;
+}
+
+.additional-text {
+    position: absolute;
+    top: calc(90px + 230px); /* One square down from the menu */
+    text-align: center;
+    z-index: 1;
+}
+
+.big-text {
+    color: #ffffff;
+    font-size: 55px; /* Adjust size as needed */
+    margin-bottom: 10px;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.subtitle {
+    color: #ffffff;
+    font-size: 55px; /* Match the size of big-text */
+    font-weight: bold; /* Match the boldness of big-text */
+    margin-top: 10px; /* Adjust spacing */
 }
