@@ -1,0 +1,17 @@
+{
+  "name": "project-maker",
+  "version": "1.0.0",
+  "description": "A AI Project Maker that takes your interests and turns it in project ideas!",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

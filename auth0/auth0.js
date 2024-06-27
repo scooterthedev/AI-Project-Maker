@@ -6,19 +6,12 @@ const auth0 = new Auth0Client({
 });
 async function authenticateWithEmailPassword(email, password) {
     try {
-        const response = await fetch('https://dev-wbblu8s05n80xeug.us.auth0.com/oauth/token', {
+        const response = await fetch('http://localhost:3000/api/authenticate', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: JSON.stringify({
-                grant_type: 'password',
-                username: email,
-                password: password,
-                client_id: 'NnsGLhYmjGus273M995L7JdI4qoT0OQr',
-                client_secret: 'n9MQ1aF8Y5N275z2VOIOWWgBrNH6xW3a9XgXknAyj8CSfolClFiZg5oEpIdhBJ1W',
-                audience: 'https://dev-wbblu8s05n80xeug.us.auth0.com/api/v2/'
-            })
+            body: JSON.stringify({ email, password })
         });
 
         if (!response.ok) {
@@ -32,7 +25,7 @@ async function authenticateWithEmailPassword(email, password) {
         console.log('Access Token:', accessToken);
 
         // Optionally, redirect to another page on successful login
-        window.location.href = '/dashboard'; // Replace with your desired redirect URL
+        window.location.href = '/dashboard';
     } catch (error) {
         console.error('Login failed:', error);
         document.getElementById('error-message').textContent = 'Invalid email or password.';
@@ -41,7 +34,9 @@ async function authenticateWithEmailPassword(email, password) {
 
 document.getElementById('login-form').addEventListener('submit', async (event) => {
     event.preventDefault(); // Prevent default form submission
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+
     await authenticateWithEmailPassword(email, password);
 });
