@@ -1,15 +1,31 @@
-// Initialize Auth0 client
-const auth0 = new Auth0Client({
-    domain: 'dev-wbblu8s05n80xeug.us.auth0.com',
-    client_id: 'NnsGLhYmjGus273M995L7JdI4qoT0OQr',
-    redirect_uri: window.location.origin
-});
+async function checkUserExists(email) {
+    try {
+        const response = await fetch('http://localhost:3000/api/check-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        if (!response.ok) {
+            throw new Error('User not found.');
+        }
+
+        const data = await response.json();
+        return data.userExists;
+    } catch (error) {
+        console.error('Check user failed:', error);
+        return false;
+    }
+}
+
 async function authenticateWithEmailPassword(email, password) {
     try {
         const response = await fetch('http://localhost:3000/api/authenticate', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, password })
         });
@@ -25,7 +41,7 @@ async function authenticateWithEmailPassword(email, password) {
         console.log('Access Token:', accessToken);
 
         // Optionally, redirect to another page on successful login
-        window.location.href = '/dashboard';
+        window.location.href = '/'; // Replace with your desired redirect URL
     } catch (error) {
         console.error('Login failed:', error);
         document.getElementById('error-message').textContent = 'Invalid email or password.';
@@ -38,5 +54,11 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    await authenticateWithEmailPassword(email, password);
+    const userExists = await checkUserExists(email);
+
+    if (userExists) {
+        await authenticateWithEmailPassword(email, password);
+    } else {
+        document.getElementById('error-message').textContent = 'User not found.';
+    }
 });
