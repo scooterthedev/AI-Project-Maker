@@ -31,7 +31,7 @@
         <div class="or-divider">
             <span class="line-through">or</span>
         </div>
-        <form id="login-form" class="login-form">
+        <form id="register-form" class="login-form">
             <div class="input-container">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -44,10 +44,12 @@
                 <input type="checkbox" id="remember-me" name="remember-me">
                 <label for="remember-me">Remember me</label>
             </div>
-            <button type="submit" id="login-button" class="login-btn">Login</button>
+            <button type="submit" id="register-button" class="login-btn">Login</button>
         </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="/get-started\script.js"></script>
+
+    <!-- Include Supabase JavaScript SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
 </body>
 </html>
