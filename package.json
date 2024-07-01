@@ -1,0 +1,14 @@
+{
+  "name": "project-maker",
+  "version": "1.0.0",
+  "description": "A AI Project Maker that takes your interests and turns it in project ideas!",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.2"
+  }
+}
