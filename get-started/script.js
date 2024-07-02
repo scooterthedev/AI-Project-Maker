@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert('Registration successful, but there was an error saving user data.');
                     } else {
                         alert('Registration successful!');
-                        window.location.href = '/otp/otp.html';
+                        window.location.href = '/otp/index.html';
                     }
                 }
             }
