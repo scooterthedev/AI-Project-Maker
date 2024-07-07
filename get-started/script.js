@@ -5,12 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     const registerForm = document.getElementById('register-form');
+    const loadingBox = document.getElementById('loading-box');
+    const notification = document.getElementById('notification');
 
     registerForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+
+        // Show loading box
+        loadingBox.style.display = 'block';
 
         try {
             const { data: userExists, error: checkUserError } = await supabase
@@ -46,23 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error inserting user into database:', insertError.message);
                         alert('Registration successful, but there was an error saving user data.');
                     } else {
-                        // Send OTP using Supabase
-                        const { error: otpError } = await supabase.auth.signInWithOtp({ email });
-
-                        if (otpError) {
-                            console.error('Error sending OTP:', otpError.message);
-                            alert('Error sending OTP. Please try again.');
-                        } else {
-                            // Store email for later OTP verification
-                            sessionStorage.setItem('otpEmail', email);
-                            window.location.href = '/otp/index.html';
-                        }
+                        // Show notification popup
+                        notification.classList.add('show');
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 10000);
                     }
                 }
             }
         } catch (error) {
             console.error('Error processing request:', error.message);
             alert('Error processing request');
+        } finally {
+            // Hide loading box
+            loadingBox.style.display = 'none';
         }
     });
 });

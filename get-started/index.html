@@ -8,8 +8,8 @@
 </head>
 <body>
     <div class="top-bar">
-        <a href="#" class="login-btn">Login</a>
-        <a href="#" class="signup-btn">Sign Up</a>
+        <a href="/login/index.html" class="login-btn">Login</a>
+        <a href="/get-started/index.html" class="signup-btn">Sign Up</a>
     </div>
 
     <div class="menu-container">
@@ -47,6 +47,15 @@
             <button type="submit" id="register-button" class="login-btn">Login</button>
         </form>
     </div>
+
+    <!-- Loading box -->
+    <div id="loading-box" class="loading-box">
+        <div class="spinner"></div>
+        <p>Registering...</p>
+    </div>
+
+    <!-- Notification popup -->
+    <div id="notification" class="notification">Email sent, check your email</div>
 
     <!-- Include Supabase JavaScript SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
