@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter OTP</title>
-    <link rel="stylesheet" href="styles.css">
-    <script type="module" src="/OTP/index.html"></script>
+    <link rel="stylesheet" href="/OTP/styles.css">
+    <script type="module" src="/OTP/script.js"></script>
 </head>
 <body>
-    <div class="login-container">
+    <div class="top-bar">
+        <a href="/login/index.html" class="login-btn">Login</a>
+        <a href="/get-started/index.html" class="signup-btn">Sign Up</a>
+    </div>
+    <div class="menu-container">
+        <div class="menu">
+            <a href="#">Home</a>
+            <a href="#">Projects</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+    <div class="otp-container">
         <h2>Enter OTP</h2>
         <form id="otpForm">
             <div class="otp-inputs">
@@ -19,7 +31,7 @@
                 <input type="text" maxlength="1" class="otp-input" required>
                 <input type="text" maxlength="1" class="otp-input" required>
             </div>
-            <button type="submit">Verify OTP</button>
+            <button type="submit" class="verify-btn">Verify OTP</button>
         </form>
     </div>
 </body>

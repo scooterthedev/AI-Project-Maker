@@ -46,8 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.error('Error inserting user into database:', insertError.message);
                         alert('Registration successful, but there was an error saving user data.');
                     } else {
-                        alert('Registration successful!');
-                        window.location.href = '/otp/index.html';
+                        // Send OTP using Supabase
+                        const { error: otpError } = await supabase.auth.signInWithOtp({ email });
+
+                        if (otpError) {
+                            console.error('Error sending OTP:', otpError.message);
+                            alert('Error sending OTP. Please try again.');
+                        } else {
+                            // Store email for later OTP verification
+                            sessionStorage.setItem('otpEmail', email);
+                            window.location.href = '/otp/index.html';
+                        }
                     }
                 }
             }
