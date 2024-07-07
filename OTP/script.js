@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { error: verifyError } = await supabase.auth.verifyOtp({
             email,
             token: otp,
-            type: 'magiclink' // Adjust type as necessary
+            type: 'signup'
         });
 
         if (verifyError) {
