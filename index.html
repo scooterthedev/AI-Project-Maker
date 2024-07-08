@@ -63,9 +63,36 @@
     </div>
 
     <script>
+              document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = urlParams.get('access_token');
+
+            if (accessToken) {
+                try {
+                    // Validate token on server or process it as needed
+                    // For demonstration purposes, assume token is valid
+                    // You should verify the token with Supabase or your server
+                    // and handle errors appropriately.
+
+                    // Display "Logged in!" popup
+                    alert('Logged in!');
+
+                    // Save the access token in a cookie
+                    document.cookie = `accessToken=${accessToken}; max-age=86400; path=/`;
+
+
+                    // Eventually: Redirect user to /app
+                } catch (error) {
+                    console.error('Error processing token:', error);
+                    alert('Error processing token');
+                }
+            }
+        });
+
+
         // Typing effect for multiple words
         const typingElement = document.getElementById('typing-text');
-        const words = ['Coders', 'Architects', 'Enthusiasts'];
+        const words = ['Coders', 'Architects', 'Enthusiast'];
         let currentWordIndex = 0;
         let currentCharIndex = 0;
         let isTypingForward = true;

@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         notification.classList.add('show');
                         setTimeout(() => {
                             notification.classList.remove('show');
-                        }, 10000);
+                        }, 5000);
                     }
                 }
             }
