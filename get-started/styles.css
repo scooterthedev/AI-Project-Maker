@@ -227,3 +227,20 @@ button.register-btn:hover {
         transform: rotate(360deg);
     }
 }
+.message, .error-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.message {
+    background-color: #171925;
+    color: #ffffff;
+    box-shadow: 0 0 5px 2px rgba(104, 130, 248, 0.5);
+}
+
+.error-message {
+    background-color: #ff4c4c;
+    color: #ffffff;
+}
