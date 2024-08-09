@@ -167,25 +167,25 @@
                 if (currentCharIndex < currentWord.length) {
                     typingElement.textContent += currentWord.charAt(currentCharIndex);
                     currentCharIndex++;
-                    setTimeout(typeText, 200); // Adjust typing speed (milliseconds)
+                    setTimeout(typeText, 200); 
                 } else {
                     isTypingForward = false;
-                    setTimeout(typeText, 1000); // Pause before typing backwards (milliseconds)
+                    setTimeout(typeText, 1000); 
                 }
             } else {
                 if (currentCharIndex >= 0) {
                     typingElement.textContent = currentWord.substring(0, currentCharIndex);
                     currentCharIndex--;
-                    setTimeout(typeText, 100); // Adjust typing speed for backwards typing (milliseconds)
+                    setTimeout(typeText, 100); 
                 } else {
                     isTypingForward = true;
-                    currentWordIndex = (currentWordIndex + 1) % words.length; // Move to next word
-                    setTimeout(typeText, 1000); // Pause before typing next word (milliseconds)
+                    currentWordIndex = (currentWordIndex + 1) % words.length; 
+                    setTimeout(typeText, 1000);
                 }
             }
         }
 
-        typeText(); // Start typing animation
+        typeText();
 
     </script>
 </body>
