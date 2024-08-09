@@ -77,16 +77,21 @@
 
     <script>
         function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + (value || "") + ";" + expires + ";path=/";
         }
 
         function getCookie(name) {
-            const value = "; " + document.cookie;
-            const parts = value.split("; " + name + "=");
-            if (parts.length === 2) return parts.pop().split(";").shift();
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -119,7 +124,7 @@
                     successMessage.textContent = 'Logged in!';
                     messageContainer.appendChild(successMessage);
 
-                    window.location.href = "/app/index.html";
+                    window.location.href = "/app";
                 } catch (error) {
                     const errorElement = document.createElement('div');
                     errorElement.className = 'error-message';
