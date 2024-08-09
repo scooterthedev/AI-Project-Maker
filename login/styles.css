@@ -4,11 +4,11 @@ body, html {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column; /* Ensure stacking order */
+    flex-direction: column; 
     justify-content: center;
     align-items: center;
     background-color: #0a0c19;
-    font-family: Arial, sans-serif; /* Set your preferred font family */
+    font-family: Arial, sans-serif; 
 }
 
 .top-bar {
@@ -19,8 +19,8 @@ body, html {
     padding: 10px 20px;
     box-sizing: border-box;
     position: absolute;
-    top: 20px; /* Adjust as needed */
-    z-index: 2; /* Ensure it's above grid */
+    top: 20px; 
+    z-index: 2; 
 }
 
 .login-btn, .signup-btn {
@@ -36,7 +36,7 @@ body, html {
     color: #ffffff;
     border: 2px solid transparent;
     border-radius: 5px;
-    box-shadow: 0 0 5px 2px rgba(104, 130, 248, 0.5); /* Blue glow effect */
+    box-shadow: 0 0 5px 2px rgba(104, 130, 248, 0.5); 
 }
 
 .login-btn:hover {
@@ -61,22 +61,22 @@ body, html {
 .menu-container {
     display: flex;
     justify-content: center;
-    width: 90%; /* Adjust width as needed */
-    max-width: 800px; /* Limiting maximum width */
+    width: 90%; 
+    max-width: 800px; 
     margin-bottom: 20px;
     position: absolute;
-    top: 30px; /* Adjust as needed */
-    z-index: 2; /* Ensure it's above grid */
+    top: 30px; 
+    z-index: 2; 
 }
 
 .menu {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1a1c29; /* Background color for menu */
-    padding: 10px 0; /* Vertical padding for menu */
-    border-radius: 30px; /* Rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Drop shadow */
+    background-color: #1a1c29; 
+    padding: 10px 0; 
+    border-radius: 30px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
 .menu a {
@@ -84,7 +84,7 @@ body, html {
     text-decoration: none;
     padding: 10px 20px;
     margin: 0 10px;
-    border-radius: 5px; /* Rounded corners for menu items */
+    border-radius: 5px; 
     transition: background-color 0.3s;
 }
 
@@ -145,11 +145,11 @@ body, html {
 }
 
 .line-through::before {
-    left: -110%; /* Adjust as needed */
+    left: -110%; 
 }
 
 .line-through::after {
-    right: -110%; /* Adjust as needed */
+    right: -110%; 
 }
 
 .login-form {
@@ -190,22 +190,21 @@ body, html {
     border-color: #6882f8;
 }
 
-/* Styles for the "Remember Me" checkbox and label */
 .input-container.remember-me {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
     width: 100%;
-    justify-content: flex-start; /* Align left */
+    justify-content: flex-start; 
 }
 
 .input-container.remember-me input[type="checkbox"] {
-    margin-right: 10px; /* Add space between checkbox and text */
+    margin-right: 10px; 
     width: 20px;
     height: 20px;
-    accent-color: #6882f8; /* Change checkbox color */
+    accent-color: #6882f8; 
     cursor: pointer;
-    border-radius: 50%; /* Make checkbox rounded */
+    border-radius: 50%; 
 }
 
 .input-container.remember-me label {
@@ -214,9 +213,8 @@ body, html {
     cursor: pointer;
 }
 
-/* Adjusting the form button margin */
 button.login-btn {
-    margin-top: 20px; /* Adjust margin to balance with the checkbox */
+    margin-top: 20px; 
     width: 100%;
     padding: 10px 20px;
     background-color: #171925;
@@ -234,7 +232,6 @@ button.login-btn:hover {
     border-color: #6882f8;
 }
 
-/* Error message styling */
 .error-message {
     color: #ff4f4f;
     margin-top: 20px;
