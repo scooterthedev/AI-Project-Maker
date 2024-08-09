@@ -39,19 +39,34 @@
                     const { access_token } = JSON.parse(localStorageData);
 
                     if (access_token) {
-                        const { data, error: sessionError } = await supabase.auth.setSession({ access_token });
 
-                        if (sessionError) {
-                            throw new Error('Failed to set session: ' + sessionError.message);
+                        supabase.auth.setSession(access_token);
+
+                        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+                        if (sessionError || !sessionData || !sessionData.session) {
+                            throw new Error('Invalid session: ' + (sessionError ? sessionError.message : 'No session data'));
                         }
 
-                        const { data: sessionData, error } = await supabase.auth.getSession();
+                        const { data: userData, error: userError } = await supabase.auth.getUser();
 
-                        if (error || !sessionData.session) {
-                            throw new Error('Invalid session: ' + (error ? error.message : 'No session data'));
+                        if (userError) {
+                            throw new Error('Error fetching user data: ' + userError.message);
                         }
 
-                        document.getElementById('welcome-message').textContent = `Hi, ${sessionData.session.user.email}`;
+                        if (userData && userData.user) {
+                            const storedToken = access_token;  
+                            const actualToken = userData.user.token;  
+
+                            if (storedToken === actualToken) {
+
+                                document.getElementById('welcome-message').textContent = `Hi, ${userData.user.email}`;
+                            } else {
+                                throw new Error('Token mismatch: stored token does not match with Supabase token');
+                            }
+                        } else {
+                            throw new Error('No user data found');
+                        }
 
                     } else {
                         throw new Error('No access token found');
@@ -62,13 +77,13 @@
                     document.getElementById('error-message').textContent = 'Your session is no longer valid. Redirecting to home page.';
                     setTimeout(() => {
                         window.location.href = '/';
-                    }, 200000000);
+                    }, 200000);
                 }
             } else {
                 document.getElementById('error-message').textContent = 'No session found. Redirecting to home page.';
                 setTimeout(() => {
                     window.location.href = '/';
-                }, 2000000);
+                }, 200000);
             }
         });
     </script>
