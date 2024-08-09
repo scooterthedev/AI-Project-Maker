@@ -9,7 +9,6 @@
     <script src="/script.js" defer></script>
     <style>
         .typing-bar {
-            display: inline-block;
             width: 20px; /* Width of the typing indicator */
             height: 1em; /* Height of the typing indicator */
             background-color: white; /* Color of the typing indicator */
@@ -26,6 +25,18 @@
             color: #ffffff;
             font-size: 20px; /* Adjust size as needed */
             margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -62,29 +73,81 @@
         <a href="/get-started" class="get-started-btn">Get Started</a>
     </div>
 
+    <div id="message-container"></div>
+
     <script>
-              document.addEventListener('DOMContentLoaded', async () => {
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const value = "; " + document.cookie;
+            const parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const supabaseUrl = 'https://lllitinjwarzhqnfxkur.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsbGl0aW5qd2FyemhxbmZ4a3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3Nzk0MjUsImV4cCI6MjAzNTM1NTQyNX0.jXiEA7f-cpOBD_1N-UaVrtCDGE7ovglAzHvT_L1LAug';
+            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
             const urlParams = new URLSearchParams(window.location.hash.substring(1));
             const accessToken = urlParams.get('access_token');
+            const refreshToken = urlParams.get('refresh_token');
+            const type = urlParams.get('type');
+            const messageContainer = document.getElementById('message-container');
 
-            if (accessToken) {
+            if (accessToken && refreshToken && type === 'recovery') {
                 try {
-                    // Validate token on server or process it as needed
-                    // For demonstration purposes, assume token is valid
-                    // You should verify the token with Supabase or your server
-                    // and handle errors appropriately.
+                    const { error: signInError } = await supabase.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken,
+                    });
 
-                    // Display "Logged in!" popup
-                    alert('Logged in!');
+                    if (signInError) {
+                        throw new Error('Failed to sign in: ' + signInError.message);
+                    }
 
-                    // Save the access token in a cookie
-                    document.cookie = `accessToken=${accessToken}; max-age=86400; path=/`;
+                    setCookie('accessToken', accessToken, 2);
+                    setCookie('refreshToken', refreshToken, 2);
 
+                    const successMessage = document.createElement('div');
+                    successMessage.className = 'success-message';
+                    successMessage.textContent = 'Logged in!';
+                    messageContainer.appendChild(successMessage);
 
-                    // Eventually: Redirect user to /app
+                    window.location.href = '/app';
                 } catch (error) {
-                    console.error('Error processing token:', error);
-                    alert('Error processing token');
+                    const errorElement = document.createElement('div');
+                    errorElement.className = 'error-message';
+                    errorElement.textContent = 'An error occurred while processing the token.';
+                    messageContainer.appendChild(errorElement);
+                }
+            } else {
+                const savedAccessToken = getCookie('accessToken');
+                const savedRefreshToken = getCookie('refreshToken');
+
+                if (savedAccessToken && savedRefreshToken) {
+                    try {
+                        const { error: signInError } = await supabase.auth.setSession({
+                            access_token: savedAccessToken,
+                            refresh_token: savedRefreshToken,
+                        });
+
+                        if (signInError) {
+                            throw new Error('Failed to restore session: ' + signInError.message);
+                        }
+
+                        window.location.href = '/app';
+                    } catch (error) {
+                        const errorElement = document.createElement('div');
+                        errorElement.className = 'error-message';
+                        errorElement.textContent = 'Session expired or invalid. Please log in again.';
+                        messageContainer.appendChild(errorElement);
+                    }
                 }
             }
         });
