@@ -75,11 +75,13 @@ document.getElementById('profile-photo-input').addEventListener('change', async 
         }
 
         try {
-            const uploadUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/avatars/private/${file.name}`;
+            const fileName = file.name;
+
+            const uploadUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/avatars/private/${fileName}`;
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch(uploadUrl, {
+            const uploadResponse = await fetch(uploadUrl, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -87,33 +89,31 @@ document.getElementById('profile-photo-input').addEventListener('change', async 
                 body: formData
             });
 
-            const responseText = await response.text();
-            if (!response.ok) {
-                console.error(`Error uploading file: ${response.status} ${response.statusText}`);
+            if (!uploadResponse.ok) {
+                console.error(`Error uploading file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                const responseText = await uploadResponse.text();
                 console.error('Response:', responseText);
-                throw new Error(`Error uploading file: ${response.statusText}`);
+                throw new Error(`Error uploading file: ${uploadResponse.statusText}`);
             }
 
-            const data = JSON.parse(responseText);
-            console.log('File uploaded successfully:', data);
+            const signedUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/authenticated/avatars/private/${fileName}`;
 
-            // Create signed URL for accessing the file
-            const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-                .from('avatars')
-                .createSignedUrl(`private/${file.name}`, 3600);
+            const imageResponse = await fetch(signedUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
 
-            if (signedUrlError) {
-                console.error('Error creating signed URL:', signedUrlError);
-                return;
+            if (!imageResponse.ok) {
+                throw new Error('Failed to fetch image: ' + imageResponse.statusText);
             }
 
-            const photoUrl = signedUrlData.signedUrl;
-            console.log('Signed URL:', photoUrl);
-
-            // Set the profile photo logo
-            document.getElementById('profile-photo-logo').src = photoUrl;
+            const imageBlob = await imageResponse.blob();
+            const imageUrl = URL.createObjectURL(imageBlob);
+            document.getElementById('profile-photo-logo').src = imageUrl;
         } catch (error) {
-            console.error('Error handling profile photo upload:', error);
+            console.error('Error handling profile photo:', error);
         }
     }
 });
