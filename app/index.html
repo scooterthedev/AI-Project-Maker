@@ -3,89 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App</title>
+    <title>Home</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="/script.js" defer></script>
-    <style>
-        .welcome-message {
-            font-size: 20px;
-            color: green;
-            margin-top: 20px;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-    </style>
+    <script src="/app/script.js" defer></script>
 </head>
 <body>
-    <div id="welcome-message"></div>
+    <div class="top-bar">
+    </div>
+
+    <div class="side-bar" id="side-bar">
+        <nav class="menu">
+            <a href="#">TODO 1</a>
+            <a href="#">TODO 2</a>
+            <a href="#">TODO 3</a>
+            <a href="#">TODO 4</a>
+        </nav>
+    </div>
+
+    <div class="toggle-button-container">
+        <button id="toggle-button" class="toggle-button">☰</button>
+    </div>
+
+    <div class="welcome-text" id="welcome-message"></div>
     <div id="error-message" class="error-message"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const supabaseUrl = 'https://lllitinjwarzhqnfxkur.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsbGl0aW5qd2FyemhxbmZ4a3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3Nzk0MjUsImV4cCI6MjAzNTM1NTQyNX0.jXiEA7f-cpOBD_1N-UaVrtCDGE7ovglAzHvT_L1LAug';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-            const tokenKey = 'sb-lllitinjwarzhqnfxkur-auth-token';
-            const localStorageData = localStorage.getItem(tokenKey);
-
-            if (localStorageData) {
-                try {
-                    const { access_token } = JSON.parse(localStorageData);
-
-                    if (access_token) {
-
-                        supabase.auth.setSession(access_token);
-
-                        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-
-                        if (sessionError || !sessionData || !sessionData.session) {
-                            throw new Error('Invalid session: ' + (sessionError ? sessionError.message : 'No session data'));
-                        }
-
-                        const { data: userData, error: userError } = await supabase.auth.getUser();
-
-                        if (userError) {
-                            throw new Error('Error fetching user data: ' + userError.message);
-                        }
-
-                        if (userData && userData.user) {
-                            const storedToken = access_token;  
-                            const actualToken = userData.user.token;  
-
-                            if (storedToken === actualToken) {
-
-                                document.getElementById('welcome-message').textContent = `Hi, ${userData.user.email}`;
-                            } else {
-                                throw new Error('Token mismatch: stored token does not match with Supabase token');
-                            }
-                        } else {
-                            throw new Error('No user data found');
-                        }
-
-                    } else {
-                        throw new Error('No access token found');
-                    }
-
-                } catch (error) {
-                    console.error('Error validating token:', error);
-                    document.getElementById('error-message').textContent = 'Your session is no longer valid. Redirecting to home page.';
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 200000);
-                }
-            } else {
-                document.getElementById('error-message').textContent = 'No session found. Redirecting to home page.';
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 200000);
-            }
-        });
-    </script>
 </body>
 </html>
