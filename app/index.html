@@ -9,9 +9,6 @@
     <script src="/app/script.js" defer></script>
 </head>
 <body>
-    <div class="top-bar">
-    </div>
-
     <div class="side-bar" id="side-bar">
         <nav class="menu">
             <a href="#">TODO 1</a>
@@ -23,6 +20,21 @@
 
     <div class="toggle-button-container">
         <button id="toggle-button" class="toggle-button">☰</button>
+    </div>
+
+    <div class="profile-container">
+        <button id="profile-button" class="profile-button">
+            <img src="profile-photo.jpg" alt="Profile" class="profile-photo">
+        </button>
+        <div id="profile-menu" class="profile-menu">
+            <a href="#">Account</a>
+            <a href="#" id="settings-link">Settings</a>
+            <a href="#">Log Out</a>
+        </div>
+        <div id="settings-menu" class="settings-menu" style="display: none;">
+            <label for="profile-photo-input" class="upload-label">Upload Profile Photo</label>
+            <input type="file" id="profile-photo-input" style="display: none;">
+        </div>
     </div>
 
     <div class="welcome-text" id="welcome-message"></div>
