@@ -28,6 +28,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const cookieAccessToken = getCookie('sb-access-token');
                 if (cookieAccessToken === access_token) {
                     document.getElementById('welcome-message').textContent = `Hi, ${userData.user.email}`;
+
+                    const { data: userProfile, error: profileError } = await supabase
+                        .from('users')
+                        .select('profile_name')
+                        .eq('email', userData.user.email)
+                        .single();
+
+                    if (profileError) {
+                        throw new Error('Failed to fetch user profile: ' + profileError.message);
+                    }
+
+                    if (userProfile && userProfile.profile_name) {
+                        const signedUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/authenticated/avatars/private/${userProfile.profile_name}`;
+
+                        const imageResponse = await fetch(signedUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${access_token}`
+                            }
+                        });
+
+                        if (imageResponse.ok) {
+                            const imageBlob = await imageResponse.blob();
+                            const imageUrl = URL.createObjectURL(imageBlob);
+                            document.getElementById('profile-photo-logo').src = imageUrl;
+                        } else {
+                            console.error('Failed to fetch profile image:', imageResponse.statusText);
+                        }
+                    }
+
                 } else {
                     throw new Error('No user data found');
                 }
@@ -96,6 +126,16 @@ document.getElementById('profile-photo-input').addEventListener('change', async 
                 throw new Error(`Error uploading file: ${uploadResponse.statusText}`);
             }
 
+            const { data: userProfile, error: updateError } = await supabase
+                .from('users')
+                .select('profile_name')
+                .update({ profile_name: fileName })
+                .eq('email', getUserEmailFromToken(accessToken));
+
+            if (updateError) {
+                throw new Error('Error saving profile name to database: ' + updateError.message);
+            }
+
             const signedUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/authenticated/avatars/private/${fileName}`;
 
             const imageResponse = await fetch(signedUrl, {
@@ -145,4 +185,11 @@ function getCookie(name) {
 
 function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+}
+
+function getUserEmailFromToken(accessToken) {
+    const payload = accessToken.split('.')[1];
+    const decodedPayload = atob(payload);
+    const payloadObj = JSON.parse(decodedPayload);
+    return payloadObj.email;
 }
