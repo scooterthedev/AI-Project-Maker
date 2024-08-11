@@ -96,8 +96,24 @@ document.getElementById('profile-photo-input').addEventListener('change', async 
 
             const data = JSON.parse(responseText);
             console.log('File uploaded successfully:', data);
+
+            // Create signed URL for accessing the file
+            const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+                .from('avatars')
+                .createSignedUrl(`private/${file.name}`, 3600);
+
+            if (signedUrlError) {
+                console.error('Error creating signed URL:', signedUrlError);
+                return;
+            }
+
+            const photoUrl = signedUrlData.signedUrl;
+            console.log('Signed URL:', photoUrl);
+
+            // Set the profile photo logo
+            document.getElementById('profile-photo-logo').src = photoUrl;
         } catch (error) {
-            console.error('Error uploading profile photo:', error);
+            console.error('Error handling profile photo upload:', error);
         }
     }
 });
