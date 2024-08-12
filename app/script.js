@@ -82,6 +82,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    document.addEventListener('click', (event) => {
+        const profileMenu = document.getElementById('profile-menu');
+        const profileButton = document.getElementById('profile-button');
+
+        if (!profileMenu.contains(event.target) && !profileButton.contains(event.target)) {
+            profileMenu.style.display = 'none';
+        }
+    });
+
     if (localStorageData) {
         try {
             const { access_token, refresh_token } = JSON.parse(localStorageData);
