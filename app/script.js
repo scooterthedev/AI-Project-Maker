@@ -11,6 +11,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tokenKey = 'sb-lllitinjwarzhqnfxkur-auth-token';
     const localStorageData = localStorage.getItem(tokenKey);
 
+    document.getElementById('profile-photo-input').addEventListener('change', async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const accessToken = getCookie('sb-access-token');
+            if (!accessToken) {
+                console.error('Access token is missing.');
+                return;
+            }
+
+            try {
+                const fileName = file.name;
+
+                const uploadUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/avatars/private/${fileName}`;
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    console.error(`Error uploading file: ${uploadResponse.status} ${uploadResponse.statusText}`);
+                    const responseText = await uploadResponse.text();
+                    console.error('Response:', responseText);
+                    throw new Error(`Error uploading file: ${uploadResponse.statusText}`);
+                }
+
+                const updateUrl = `${supabaseUrl}/rest/v1/users?email=eq.${getUserEmailFromToken(accessToken)}`;
+
+                const updateResponse = await fetch(updateUrl, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseKey,
+                    },
+                    body: JSON.stringify({
+                        profile_name: fileName
+                    })
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Error updating profile name in database: ' + updateResponse.statusText);
+                }
+
+                const signedUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/authenticated/avatars/private/${fileName}`;
+
+                const imageResponse = await fetch(signedUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (!imageResponse.ok) {
+                    throw new Error('Failed to fetch image: ' + imageResponse.statusText);
+                }
+
+                const imageBlob = await imageResponse.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                document.getElementById('profile-photo-logo').src = imageUrl;
+            } catch (error) {
+                console.error('Error handling profile photo:', error);
+            }
+        }
+    });
+
     if (localStorageData) {
         try {
             const { access_token, refresh_token } = JSON.parse(localStorageData);
@@ -95,68 +166,6 @@ document.getElementById('settings-link').addEventListener('click', (event) => {
     document.getElementById('profile-photo-input').click();
 });
 
-document.getElementById('profile-photo-input').addEventListener('change', async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const accessToken = getCookie('sb-access-token');
-        if (!accessToken) {
-            console.error('Access token is missing.');
-            return;
-        }
-
-        try {
-            const fileName = file.name;
-
-            const uploadUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/avatars/private/${fileName}`;
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const uploadResponse = await fetch(uploadUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
-                body: formData
-            });
-
-            if (!uploadResponse.ok) {
-                console.error(`Error uploading file: ${uploadResponse.status} ${uploadResponse.statusText}`);
-                const responseText = await uploadResponse.text();
-                console.error('Response:', responseText);
-                throw new Error(`Error uploading file: ${uploadResponse.statusText}`);
-            }
-
-            const { data: userProfile, error: updateError } = await supabase
-                .from('users')
-                .select('profile_name')
-                .update({ profile_name: fileName })
-                .eq('email', getUserEmailFromToken(accessToken));
-
-            if (updateError) {
-                throw new Error('Error saving profile name to database: ' + updateError.message);
-            }
-
-            const signedUrl = `https://lllitinjwarzhqnfxkur.supabase.co/storage/v1/object/authenticated/avatars/private/${fileName}`;
-
-            const imageResponse = await fetch(signedUrl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!imageResponse.ok) {
-                throw new Error('Failed to fetch image: ' + imageResponse.statusText);
-            }
-
-            const imageBlob = await imageResponse.blob();
-            const imageUrl = URL.createObjectURL(imageBlob);
-            document.getElementById('profile-photo-logo').src = imageUrl;
-        } catch (error) {
-            console.error('Error handling profile photo:', error);
-        }
-    }
-});
 
 document.getElementById('logout-button').addEventListener('click', async () => {
     try {
