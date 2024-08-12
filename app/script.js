@@ -117,20 +117,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                     throw new Error('Failed to fetch user profile: ' + profileError.message);
                 }
 
-                const isFirstTime = userProfile && userProfile.is_first_time;
+                if (userProfile && userProfile.is_first_time) {
+                    document.getElementById('welcome-message').textContent = 'Hiiii';
 
-                if (isFirstTime) {
-                    setCookie('is_first_time', 'true', 14);
                     const { error: updateError } = await supabase
                         .from('users')
                         .update({ is_first_time: false })
                         .eq('email', userEmail);
+
+                    if (updateError) {
+                        throw new Error('Failed to update is_first_time: ' + updateError.message);
+                    }
+                    if (updateError) {
+                        throw new Error('Failed to update is_first_time: ' + updateError.message);
+                    }
+                    setCookie('is_first_time', 'true', 14);
+                    setCookie('is_first_time', 'true', 14);
                 } else {
                     setCookie('is_first_time', 'false', 14);
-                }
-
-                if (isFirstTime) {
-                    document.getElementById('overlay').classList.add('show');
                 }
 
                 const cookieAccessToken = getCookie('sb-access-token');
