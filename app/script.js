@@ -105,14 +105,43 @@ document.addEventListener('DOMContentLoaded', async () => {
                     throw new Error('Failed to fetch session details: ' + error.message);
                 }
 
+                const userEmail = userData.user.email;
+
+                const { data: userProfile, error: profileError } = await supabase
+                    .from('users')
+                    .select('is_first_time')
+                    .eq('email', userEmail)
+                    .single();
+
+                if (profileError) {
+                    throw new Error('Failed to fetch user profile: ' + profileError.message);
+                }
+
+                if (userProfile && userProfile.is_first_time) {
+                    document.getElementById('welcome-message').textContent = 'Hiiii';
+
+                    const { error: updateError } = await supabase
+                        .from('users')
+                        .update({ is_first_time: false })
+                        .eq('email', userEmail);
+
+                    if (updateError) {
+                        throw new Error('Failed to update is_first_time: ' + updateError.message);
+                    }
+
+                    setCookie('is_first_time', 'true', 14);
+                } else {
+                    setCookie('is_first_time', 'false', 14);
+                }
+
                 const cookieAccessToken = getCookie('sb-access-token');
                 if (cookieAccessToken === access_token) {
-                    document.getElementById('welcome-message').textContent = `Hi, ${userData.user.email}`;
+                    document.getElementById('welcome-message').textContent = `Hi, ${userEmail}`;
 
                     const { data: userProfile, error: profileError } = await supabase
                         .from('users')
                         .select('profile_name')
-                        .eq('email', userData.user.email)
+                        .eq('email', userEmail)
                         .single();
 
                     if (profileError) {
@@ -137,14 +166,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                             console.error('Failed to fetch profile image:', imageResponse.statusText);
                         }
                     }
-
                 } else {
                     throw new Error('No user data found');
                 }
             } else {
                 throw new Error('No access token found');
             }
-
         } catch (error) {
             console.error('Error validating token:', error);
             document.getElementById('error-message').textContent = 'Your session is no longer valid. Redirecting to home page.';
@@ -174,7 +201,6 @@ document.getElementById('settings-link').addEventListener('click', (event) => {
     event.preventDefault(); 
     document.getElementById('profile-photo-input').click();
 });
-
 
 document.getElementById('logout-button').addEventListener('click', async () => {
     try {
@@ -206,8 +232,11 @@ function deleteCookie(name) {
 }
 
 function getUserEmailFromToken(accessToken) {
-    const payload = accessToken.split('.')[1];
-    const decodedPayload = atob(payload);
-    const payloadObj = JSON.parse(decodedPayload);
-    return payloadObj.email;
+    const base64Url = accessToken.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload).email;
 }
