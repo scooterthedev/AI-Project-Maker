@@ -192,10 +192,22 @@ body, html {
     background: white;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
     text-align: center;
     max-width: 400px;
     width: 100%;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.welcome-button {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
     animation: fadeIn 1s ease-in-out;
 }
 

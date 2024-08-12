@@ -221,6 +221,39 @@ document.getElementById('logout-button').addEventListener('click', async () => {
     }
 });
 
+function updateGradient(element, x, y) {
+    const rect = element.getBoundingClientRect();
+    const percentX = (x - rect.left) / rect.width * 100;
+    const percentY = (y - rect.top) / rect.height * 100;
+    const gradient = `radial-gradient(circle at ${percentX}% ${percentY}%, #4facfe, #00f2fe)`;
+
+    return gradient;
+}
+
+document.getElementById('overlay').addEventListener('mousemove', (event) => {
+    const overlay = document.getElementById('overlay');
+    const gradient = updateGradient(overlay, event.clientX, event.clientY);
+    overlay.style.borderImage = `${gradient} 1`;
+});
+
+document.getElementById('welcome-button').addEventListener('mousemove', (event) => {
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    button.style.background = `radial-gradient(circle at ${x}px ${y}px, #4facfe, #00f2fe)`;
+});
+
+document.getElementById('welcome-button').addEventListener('mouseleave', () => {
+    document.getElementById('welcome-button').style.background = '';
+});
+
+document.getElementById('welcome-button').addEventListener('mouseenter', (event) => {
+    const button = document.getElementById('welcome-button');
+    button.style.background = updateGradient(button, event.clientX, event.clientY);
+});
+
+
 function setCookie(name, value, days) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
     document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
