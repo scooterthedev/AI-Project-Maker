@@ -9,13 +9,6 @@
     <script src="/app/script.js" defer></script>
 </head>
 <body>
-    <div class="overlay" id="overlay">
-        <div class="overlay-content">
-            <h2>Welcome!</h2>
-            <p>Thank you for joining us. Explore and enjoy your new experience!</p>
-        </div>
-    </div>
-
     <div class="side-bar" id="side-bar">
         <nav class="menu">
             <a href="#">TODO 1</a>
@@ -36,8 +29,11 @@
         <div id="profile-menu" class="profile-menu">
             <a href="#">Account</a>
             <a href="#" id="settings-link">Settings</a>
-            <input type="file" id="profile-photo-input" class="upload-input" style="display: none;">
-            <a href="#" id="logout-button">Logout</a>
+            <button id="logout-button">Log Out</button>
+        </div>
+        <div id="settings-menu" class="settings-menu">
+            <label for="profile-photo-upload" class="upload-label">Upload Profile Photo</label>
+            <input type="file" id="profile-photo-input" style="display: none;">
         </div>
     </div>
 
