@@ -265,3 +265,31 @@ body, html {
     background-color: #4a90e2;
     transform: scale(1.05);
 }
+#specifics-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1001; 
+}
+
+#hobby-specifics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hobby-specific {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}

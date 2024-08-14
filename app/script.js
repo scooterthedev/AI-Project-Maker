@@ -1,7 +1,8 @@
+let supabase;
 document.addEventListener('DOMContentLoaded', async () => {
     const supabaseUrl = 'https://lllitinjwarzhqnfxkur.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsbGl0aW5qd2FyemhxbmZ4a3VyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk3Nzk0MjUsImV4cCI6MjAzNTM1NTQyNX0.jXiEA7f-cpOBD_1N-UaVrtCDGE7ovglAzHvT_L1LAug';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    supabase = await window.supabase.createClient(supabaseUrl, supabaseKey);
 
     if (!supabase || !supabase.storage) {
         console.error('Supabase client or storage is not initialized correctly.');
@@ -105,7 +106,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     throw new Error('Failed to fetch session details: ' + error.message);
                 }
 
-                const userEmail = userData.user.email;
+                let useremail;
+                userEmail = userData.user.email;
 
                 const { data: userProfile, error: profileError } = await supabase
                     .from('users')
@@ -277,13 +279,13 @@ document.querySelectorAll('.hobby-box').forEach(box => {
 
 document.getElementById('submit-hobbies').addEventListener('click', async () => {
     const selectedHobbies = [];
-    
+
     document.querySelectorAll('.hobby-box.selected').forEach(box => {
         const id = box.getAttribute('data-id');
-        const hobby = box.getAttribute('data-hobby');
-        selectedHobbies.push(`${id}=${hobby}`);
+        const hobbyName = box.getAttribute('data-hobby');
+        selectedHobbies.push(`${id}=${hobbyName}`);
     });
-    
+
     if (selectedHobbies.length > 0) {
         const hobbiesString = selectedHobbies.join(', ');
         
@@ -292,7 +294,7 @@ document.getElementById('submit-hobbies').addEventListener('click', async () => 
         document.cookie = `users_hobby=${encodedHobbies}; path=/;`;
 
         await sendHobbiesToSupabase(encodedHobbies);
-        } else {
+    } else {
         alert("Please select at least one hobby.");
     }
 });
@@ -301,7 +303,7 @@ async function sendHobbiesToSupabase(hobbies) {
     const { data, error } = await supabase
         .from('users')
         .update({ users_hobby: hobbies })
-        .eq('email', userEmail)
+        .eq('email', userEmail);
 
     if (error) {
         console.error('Error updating hobbies:', error);
