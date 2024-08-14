@@ -297,15 +297,6 @@ document.getElementById('submit-hobbies').addEventListener('click', async () => 
     } else {
         alert("Please select at least one hobby.");
     }
-    console.log('Selected hobbies:', selectedHobbies);
-
-    document.getElementById('overlay-hobbies').classList.remove('show');
-    document.getElementById('overlay-hobbies').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('overlay-hobbies').style.display = 'none';
-    }, 500);
-
-    displaySpecificsOverlay(selectedHobbies);
 });
 
 async function sendHobbiesToSupabase(hobbies) {
@@ -321,6 +312,31 @@ async function sendHobbiesToSupabase(hobbies) {
     }
 }
 
+document.getElementById('submit-hobbies').addEventListener('click', async () => {
+    const selectedHobbies = [];
+    
+    document.querySelectorAll('.hobby-box.selected').forEach(box => {
+        selectedHobbies.push({
+            id: box.dataset.id,
+            name: box.textContent.trim()
+        });
+    });
+
+    if (selectedHobbies.length === 0) {
+        alert('Please select at least one hobby.');
+        return;
+    }
+
+    console.log('Selected hobbies:', selectedHobbies);
+
+    document.getElementById('overlay-hobbies').classList.remove('show');
+    document.getElementById('overlay-hobbies').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay-hobbies').style.display = 'none';
+    }, 500);
+
+    displaySpecificsOverlay(selectedHobbies);
+});
 
 function displaySpecificsOverlay(hobbies) {
     const container = document.getElementById('hobby-specifics-container');
@@ -370,7 +386,8 @@ function getSpecificOptionsForHobby(hobbyName) {
         'Reading': ['Fiction', 'Non-Fiction', 'Mystery', 'Science Fiction'],
         'Gaming': ['Console', 'PC', 'Mobile', 'Board Games'],
         'Cooking': ['Baking', 'Grilling', 'Vegetarian', 'Desserts'],
-        'Writing': ['Books, Novels, Children Books']
+        'Writing': ['Books, Novels, Children Books'],
+        'Music': ['Rock, Pop, Country']
     };
     return hobbyOptions[hobbyName] || [];
 }
