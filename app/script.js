@@ -253,6 +253,63 @@ document.getElementById('welcome-button').addEventListener('mouseenter', (event)
     button.style.background = updateGradient(button, event.clientX, event.clientY);
 });
 
+document.getElementById('welcome-button').addEventListener('click', () => {
+    const overlay = document.getElementById('overlay');
+    overlay.classList.remove('show');
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+        overlay.style.display = 'none';
+        const overlayHobbies = document.getElementById('overlay-hobbies');
+        overlayHobbies.style.display = 'flex';
+        setTimeout(() => {
+            overlayHobbies.style.opacity = '1';
+            overlayHobbies.classList.add('show');
+        }, 10);
+    }, 500);
+});
+
+document.querySelectorAll('.hobby-box').forEach(box => {
+    box.addEventListener('click', () => {
+        box.classList.toggle('selected'); 
+        box.style.backgroundColor = box.classList.contains('selected') ? '#4a90e2' : 'white';
+    });
+});
+
+document.getElementById('submit-hobbies').addEventListener('click', async () => {
+    const selectedHobbies = [];
+    
+    document.querySelectorAll('.hobby-box.selected').forEach(box => {
+        const id = box.getAttribute('data-id');
+        const hobby = box.getAttribute('data-hobby');
+        selectedHobbies.push(`${id}=${hobby}`);
+    });
+    
+    if (selectedHobbies.length > 0) {
+        const hobbiesString = selectedHobbies.join(', ');
+        
+        const encodedHobbies = btoa(hobbiesString);
+        
+        document.cookie = `users_hobby=${encodedHobbies}; path=/;`;
+
+        await sendHobbiesToSupabase(encodedHobbies);
+        } else {
+        alert("Please select at least one hobby.");
+    }
+});
+
+async function sendHobbiesToSupabase(hobbies) {
+    const { data, error } = await supabase
+        .from('users')
+        .update({ users_hobby: hobbies })
+        .eq('email', userEmail)
+
+    if (error) {
+        console.error('Error updating hobbies:', error);
+    } else {
+        console.log('Hobbies updated:', data);
+    }
+}
+
 
 function setCookie(name, value, days) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
