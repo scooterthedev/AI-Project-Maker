@@ -297,6 +297,15 @@ document.getElementById('submit-hobbies').addEventListener('click', async () => 
     } else {
         alert("Please select at least one hobby.");
     }
+    console.log('Selected hobbies:', selectedHobbies);
+
+    document.getElementById('overlay-hobbies').classList.remove('show');
+    document.getElementById('overlay-hobbies').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay-hobbies').style.display = 'none';
+    }, 500);
+
+    displaySpecificsOverlay(selectedHobbies);
 });
 
 async function sendHobbiesToSupabase(hobbies) {
@@ -312,6 +321,59 @@ async function sendHobbiesToSupabase(hobbies) {
     }
 }
 
+
+function displaySpecificsOverlay(hobbies) {
+    const container = document.getElementById('hobby-specifics-container');
+    container.innerHTML = '';
+
+    hobbies.forEach(hobby => {
+        const section = document.createElement('div');
+        section.classList.add('hobby-specific');
+        section.innerHTML = `<h3>${hobby.name}</h3>`;
+
+        const options = getSpecificOptionsForHobby(hobby.name);
+        if (options.length === 0) {
+            section.innerHTML += '<p>No specifics available.</p>';
+        } else {
+            options.forEach(option => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = option;
+                checkbox.id = `${hobby.id}-${option}`;
+                
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.textContent = option;
+                
+                const optionDiv = document.createElement('div');
+                optionDiv.appendChild(checkbox);
+                optionDiv.appendChild(label);
+                section.appendChild(optionDiv);
+            });
+        }
+
+        container.appendChild(section);
+    });
+
+    console.log('Displaying specifics overlay');
+    
+    const specificsOverlay = document.getElementById('specifics-overlay');
+    specificsOverlay.style.display = 'flex';
+    setTimeout(() => {
+        specificsOverlay.style.opacity = '1';
+        specificsOverlay.classList.add('show');
+    }, 10);
+}
+
+function getSpecificOptionsForHobby(hobbyName) {
+    const hobbyOptions = {
+        'Reading': ['Fiction', 'Non-Fiction', 'Mystery', 'Science Fiction'],
+        'Gaming': ['Console', 'PC', 'Mobile', 'Board Games'],
+        'Cooking': ['Baking', 'Grilling', 'Vegetarian', 'Desserts'],
+        'Writing': ['Books, Novels, Children Books']
+    };
+    return hobbyOptions[hobbyName] || [];
+}
 
 function setCookie(name, value, days) {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
