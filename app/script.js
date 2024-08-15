@@ -377,8 +377,9 @@ function getSpecificOptionsForHobby(hobbyName) {
         'Gaming': ['Console', 'PC', 'Mobile', 'Video Games'],
         'Cooking': ['Baking', 'Grilling', 'Vegetarian', 'Desserts'],
         'Writing': ['Books', 'Novels', 'Children Books'],
-        'Music': ['Rock', 'Pop', 'Country'],
-        'Art': ['Oil Painting', 'Digital']
+        'Music': ['Rock', 'Pop', 'Country', 'Classical'],
+        'Art': ['Oil Painting', 'Digital', 'Drawing', 'Cartoons', 'Sketching'],
+        'Photography': ['People', 'Nature', 'Landmarks']
     };
     return hobbyOptions[hobbyName] || [];
 }
@@ -398,7 +399,6 @@ document.getElementById('submit-specifics-button').addEventListener('click', asy
     if (Object.keys(selectedOptions).length > 0) {
         const existingHobbiesEncoded = getCookie('users_hobby');
         const existingHobbies = existingHobbiesEncoded ? decodeHobbies(existingHobbiesEncoded) : {};
-
         const updatedHobbies = { ...existingHobbies, ...selectedOptions };
 
         const updatedHobbiesString = Object.entries(updatedHobbies).map(([hobby, specifics]) => `${hobby}=${specifics.join(', ')}`).join(', ');
@@ -407,14 +407,52 @@ document.getElementById('submit-specifics-button').addEventListener('click', asy
 
         await sendHobbiesToSupabase(encodedHobbies);
 
-        document.getElementById('specifics-overlay').style.opacity = '0';
+        // document.getElementById('specifics-overlay').style.opacity = '0';
         setTimeout(() => {
-            document.getElementById('specifics-overlay').style.display = 'none';
-        }, 300);
+         }, 300);
+
+        showLoadingOverlay();
     } else {
         alert('Please select at least one option.');
     }
 });
+
+function showLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const progressBar = loadingOverlay.querySelector('.progress');
+
+    loadingOverlay.style.display = 'flex';
+
+    progressBar.style.width = '0%';
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            progressBar.style.width = '100%';
+        });
+    });
+
+    const loadingTime = Math.random() * (7 - 5) + 5;
+    setTimeout(() => {
+        loadingOverlay.classList.add('hidden');
+        hideLoadingOverlay();
+        showSuccessOverlay();
+    }, loadingTime * 1000);
+}
+
+function showSuccessOverlay() {
+    const successOverlay = document.getElementById('success-overlay');
+    document.getElementById('success-overlay').style.display = 'flex';
+}
+
+function hideSuccessOverlay() {
+    const successOverlay = document.getElementById('success-overlay');
+    document.getElementById('success-overlay').style.display = 'none';
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    document.getElementById('success-overlay').style.display = 'none';
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
