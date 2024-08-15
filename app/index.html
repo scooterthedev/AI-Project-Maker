@@ -56,8 +56,27 @@
             </div>
             <p>Your Model is Ready!</p>
         </div>
-    </div>    
-    
+    </div>
+
+    <div id="settings-overlay" class="overlay hidden">
+        <div class="overlay-content">
+            <nav class="overlay-nav">
+                <a href="#" id="account-link">Account</a>
+                <a href="#" id="privacy-link">Privacy</a>
+            </nav>
+            <div id="overlay-sections">
+                <div id="account-section" class="overlay-section">
+                    <h2>Account</h2>
+                    <button id="upload-photo-button">Upload Profile Photo</button>
+                    <input type="file" id="profile-photo-input" class="upload-input hidden">
+                </div>
+                <div id="privacy-section" class="overlay-section hidden">
+                    <h2>Privacy</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="side-bar" id="side-bar">
         <nav class="menu">
             <a href="#">TODO 1</a>
@@ -76,9 +95,7 @@
             <img id="profile-photo-logo" alt="Profile Photo" />
         </button>
         <div id="profile-menu" class="profile-menu">
-            <a href="#">Account</a>
-            <a href="#" id="settings-link">Settings</a>
-            <input type="file" id="profile-photo-input" class="upload-input" style="display: none;">
+            <a href="#" id="settings-menu-link">Settings</a>
             <a href="#" id="logout-button">Logout</a>
         </div>
     </div>

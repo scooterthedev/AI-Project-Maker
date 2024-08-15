@@ -12,6 +12,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tokenKey = 'sb-lllitinjwarzhqnfxkur-auth-token';
     const localStorageData = localStorage.getItem(tokenKey);
 
+    document.getElementById('settings-menu-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        document.getElementById('settings-overlay').style.display = 'flex';
+        showSection('account-section');
+    });
+
+    document.getElementById('account-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        showSection('account-section');
+    });
+
+    document.getElementById('privacy-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        showSection('privacy-section');
+    });
+    document.getElementById('upload-photo-button').addEventListener('click', () => {
+        document.getElementById('profile-photo-input').click();
+    });
+
+    function showSection(sectionId) {
+        document.querySelectorAll('#overlay-sections .overlay-section').forEach(section => {
+            section.classList.toggle('active', section.id === sectionId);
+        });
+    }
+
     document.getElementById('profile-photo-input').addEventListener('change', async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -202,11 +227,6 @@ document.getElementById('toggle-button').addEventListener('click', () => {
 document.getElementById('profile-button').addEventListener('click', () => {
     const profileMenu = document.getElementById('profile-menu');
     profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
-});
-
-document.getElementById('settings-link').addEventListener('click', (event) => {
-    event.preventDefault(); 
-    document.getElementById('profile-photo-input').click();
 });
 
 document.getElementById('logout-button').addEventListener('click', async () => {
@@ -442,6 +462,16 @@ function showLoadingOverlay() {
 function showSuccessOverlay() {
     const successOverlay = document.getElementById('success-overlay');
     document.getElementById('success-overlay').style.display = 'flex';
+    setTimeout(() => {
+        hideSuccessOverlay();
+        hideLoadingOverlay();
+        hideSpecificOverlay();
+    }, 3000);
+}
+
+function hideSpecificOverlay() {
+    const specificsOverlay = document.getElementById('specifics-overlay');
+    document.getElementById('specifics-overlay').style.display = 'none';
 }
 
 function hideSuccessOverlay() {
@@ -451,7 +481,7 @@ function hideSuccessOverlay() {
 
 function hideLoadingOverlay() {
     const loadingOverlay = document.getElementById('loading-overlay');
-    document.getElementById('success-overlay').style.display = 'none';
+    document.getElementById('loading-overlay').style.display = 'none';
 }
 
 function getCookie(name) {
