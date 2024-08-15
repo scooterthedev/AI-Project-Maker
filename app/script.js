@@ -348,10 +348,7 @@ function displaySpecificsOverlay(hobbies) {
                 const box = document.createElement('div');
                 box.classList.add('option-box');
                 box.dataset.value = option;
-
-                const boxLabel = document.createElement('span');
-                boxLabel.textContent = option;
-                box.appendChild(boxLabel);
+                box.textContent = option;
 
                 box.addEventListener('click', () => {
                     box.classList.toggle('selected');
@@ -377,12 +374,74 @@ function displaySpecificsOverlay(hobbies) {
 function getSpecificOptionsForHobby(hobbyName) {
     const hobbyOptions = {
         'Reading': ['Fiction', 'Non-Fiction', 'Mystery', 'Science Fiction'],
-        'Gaming': ['Console', 'PC', 'Mobile', 'Board Games'],
+        'Gaming': ['Console', 'PC', 'Mobile', 'Video Games'],
         'Cooking': ['Baking', 'Grilling', 'Vegetarian', 'Desserts'],
-        'Writing': ['Books, Novels, Children Books'],
-        'Music': ['Rock, Pop, Country']
+        'Writing': ['Books', 'Novels', 'Children Books'],
+        'Music': ['Rock', 'Pop', 'Country'],
+        'Art': ['Oil Painting', 'Digital']
     };
     return hobbyOptions[hobbyName] || [];
+}
+
+document.getElementById('submit-specifics-button').addEventListener('click', async () => {
+    const selectedOptions = {};
+
+    document.querySelectorAll('.hobby-specific').forEach(section => {
+        const hobbyName = section.querySelector('h3').textContent;
+        const selectedBoxes = section.querySelectorAll('.option-box.selected');
+
+        if (selectedBoxes.length > 0) {
+            selectedOptions[hobbyName] = Array.from(selectedBoxes).map(box => box.dataset.value);
+        }
+    });
+
+    if (Object.keys(selectedOptions).length > 0) {
+        const existingHobbiesEncoded = getCookie('users_hobby');
+        const existingHobbies = existingHobbiesEncoded ? decodeHobbies(existingHobbiesEncoded) : {};
+
+        const updatedHobbies = { ...existingHobbies, ...selectedOptions };
+
+        const updatedHobbiesString = Object.entries(updatedHobbies).map(([hobby, specifics]) => `${hobby}=${specifics.join(', ')}`).join(', ');
+        const encodedHobbies = btoa(updatedHobbiesString);
+        document.cookie = `users_hobby=${encodedHobbies}; path=/;`;
+
+        await sendHobbiesToSupabase(encodedHobbies);
+
+        document.getElementById('specifics-overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('specifics-overlay').style.display = 'none';
+        }, 300);
+    } else {
+        alert('Please select at least one option.');
+    }
+});
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function decodeHobbies(encodedHobbies) {
+    const hobbiesString = atob(encodedHobbies);
+    const hobbiesArray = hobbiesString.split(', ').map(hobby => {
+        const [hobbyName, specifics] = hobby.split('=');
+        return { [hobbyName]: specifics.split(', ') };
+    });
+    return Object.assign({}, ...hobbiesArray);
+}
+
+async function sendHobbiesToSupabase(hobbies) {
+    const { data, error } = await supabase
+        .from('users')
+        .update({ users_hobby: hobbies })
+        .eq('email', userEmail);
+
+    if (error) {
+        console.error('Error updating hobbies:', error);
+    } else {
+        console.log('Hobbies updated:', data);
+    }
 }
 
 function setCookie(name, value, days) {
