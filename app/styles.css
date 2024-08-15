@@ -304,3 +304,60 @@ body, html {
     border-radius: 5px;
     animation: fadeIn 1s ease-in-out;
 }
+#specifics-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+#specifics-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.hobby-specific {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.option-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.option-box:hover {
+    background: #e2e6ea;
+}
+
+.option-box.selected {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.option-box span {
+    font-size: 16px;
+}
