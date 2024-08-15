@@ -283,20 +283,33 @@ document.getElementById('submit-hobbies').addEventListener('click', async () => 
     document.querySelectorAll('.hobby-box.selected').forEach(box => {
         const id = box.getAttribute('data-id');
         const hobbyName = box.getAttribute('data-hobby');
-        selectedHobbies.push(`${id}=${hobbyName}`);
+        selectedHobbies.push({
+            id: id,
+            name: hobbyName
+        });
     });
 
-    if (selectedHobbies.length > 0) {
-        const hobbiesString = selectedHobbies.join(', ');
-        
-        const encodedHobbies = btoa(hobbiesString);
-        
-        document.cookie = `users_hobby=${encodedHobbies}; path=/;`;
-
-        await sendHobbiesToSupabase(encodedHobbies);
-    } else {
-        alert("Please select at least one hobby.");
+    if (selectedHobbies.length === 0) {
+        alert('Please select at least one hobby.');
+        return;
     }
+
+    const hobbiesString = selectedHobbies.map(hobby => `${hobby.id}=${hobby.name}`).join(', ');
+    const encodedHobbies = btoa(hobbiesString);
+
+    document.cookie = `users_hobby=${encodedHobbies}; path=/;`;
+
+    await sendHobbiesToSupabase(encodedHobbies);
+
+    console.log('Selected hobbies:', selectedHobbies);
+
+    document.getElementById('overlay-hobbies').classList.remove('show');
+    document.getElementById('overlay-hobbies').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay-hobbies').style.display = 'none';
+    }, 500);
+
+    displaySpecificsOverlay(selectedHobbies);
 });
 
 async function sendHobbiesToSupabase(hobbies) {
@@ -312,73 +325,53 @@ async function sendHobbiesToSupabase(hobbies) {
     }
 }
 
-document.getElementById('submit-hobbies').addEventListener('click', async () => {
-    const selectedHobbies = [];
-    
-    document.querySelectorAll('.hobby-box.selected').forEach(box => {
-        selectedHobbies.push({
-            id: box.dataset.id,
-            name: box.textContent.trim()
-        });
-    });
-
-    if (selectedHobbies.length === 0) {
-        alert('Please select at least one hobby.');
-        return;
-    }
-
-    console.log('Selected hobbies:', selectedHobbies);
-
-    document.getElementById('overlay-hobbies').classList.remove('show');
-    document.getElementById('overlay-hobbies').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('overlay-hobbies').style.display = 'none';
-    }, 500);
-
-    displaySpecificsOverlay(selectedHobbies);
-});
-
 function displaySpecificsOverlay(hobbies) {
     const container = document.getElementById('hobby-specifics-container');
-    container.innerHTML = '';
+    container.innerHTML = ''; 
 
     hobbies.forEach(hobby => {
         const section = document.createElement('div');
         section.classList.add('hobby-specific');
-        section.innerHTML = `<h3>${hobby.name}</h3>`;
+
+        const hobbyTitle = document.createElement('h3');
+        hobbyTitle.textContent = hobby.name;
+        section.appendChild(hobbyTitle);
 
         const options = getSpecificOptionsForHobby(hobby.name);
+
         if (options.length === 0) {
-            section.innerHTML += '<p>No specifics available.</p>';
+            const noOptionsMessage = document.createElement('p');
+            noOptionsMessage.textContent = 'No specifics available.';
+            section.appendChild(noOptionsMessage);
         } else {
             options.forEach(option => {
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = option;
-                checkbox.id = `${hobby.id}-${option}`;
-                
-                const label = document.createElement('label');
-                label.htmlFor = checkbox.id;
-                label.textContent = option;
-                
-                const optionDiv = document.createElement('div');
-                optionDiv.appendChild(checkbox);
-                optionDiv.appendChild(label);
-                section.appendChild(optionDiv);
+                const box = document.createElement('div');
+                box.classList.add('option-box');
+                box.dataset.value = option;
+
+                const boxLabel = document.createElement('span');
+                boxLabel.textContent = option;
+                box.appendChild(boxLabel);
+
+                box.addEventListener('click', () => {
+                    box.classList.toggle('selected');
+                });
+
+                section.appendChild(box);
             });
         }
 
         container.appendChild(section);
     });
 
-    console.log('Displaying specifics overlay');
-    
     const specificsOverlay = document.getElementById('specifics-overlay');
     specificsOverlay.style.display = 'flex';
     setTimeout(() => {
         specificsOverlay.style.opacity = '1';
         specificsOverlay.classList.add('show');
     }, 10);
+
+    console.log('Displaying specifics overlay');
 }
 
 function getSpecificOptionsForHobby(hobbyName) {
