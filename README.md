@@ -5,6 +5,11 @@ This AI Project Maker that takes your interests and turns it in project ideas! T
 ## Landing Page
 
 ![image-20240904135012923](https://github.com/scooterthedev/AI-Project-Maker/blob/main/image-20240904135012923.png)
+![image](https://github.com/user-attachments/assets/06ff0f1c-c85b-48bd-ae1c-daca5fd17fcf)
+![image](https://github.com/user-attachments/assets/3cfe8ded-704d-4366-bb08-b9487dd590d2)
+![image](https://github.com/user-attachments/assets/b0b4672d-0e17-4c09-b852-eed0c7236dbf)
+![image](https://github.com/user-attachments/assets/c5d4afd8-7d10-4fd9-bd07-f6bf0bfb113a)
+
 
 
 
