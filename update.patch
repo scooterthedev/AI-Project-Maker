@@ -1,0 +1,20 @@
+--- database_app.py
++++ database_app_new.py
+@@ -14,7 +14,7 @@
+ 
+ PATCH_URL = "https://talkufy.com/update.patch"
+ VERSION_URL = "https://talkufy.com/version.json"
+-CURRENT_VERSION = "1.0.0"
++CURRENT_VERSION = "1.0.1"
+ 
+ def connect_database():
+     return sqlite3.connect('icons8.db')
+@@ -225,7 +225,7 @@
+         self.results_list.itemDoubleClicked.connect(self.show_icon_details)
+         self.left_layout.addWidget(self.results_list)
+ 
+-        self.settings_button = QPushButton('Settings')
++        self.settings_button = QPushButton('Settingssssssss')
+         self.settings_button.clicked.connect(self.open_settings_dialog)
+         self.left_layout.addWidget(self.settings_button)
+ 
