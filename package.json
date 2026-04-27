@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@supabase/supabase-js": "^2.44.2"
+    "@supabase/supabase-js": "^2.105.0"
   }
 }
